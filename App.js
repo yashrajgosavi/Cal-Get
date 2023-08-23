@@ -1,9 +1,10 @@
 import React from "react";
-import { Text, View } from "react-native";
 import { SafeAreaContainer } from "./src/components/utility/safe-area.component";
 import { StatusBar as ExpoStatusBar } from "expo-status-bar";
 import { ThemeProvider } from "styled-components/native";
 import { theme } from "./src/infrastucture/theme";
+import { View } from "react-native";
+import { Text } from "./src/components/typography/text.component";
 
 export default function App() {
   return (
@@ -11,7 +12,7 @@ export default function App() {
       <ThemeProvider theme={theme}>
         <SafeAreaContainer>
           <View>
-            <Text>Open up App.js to start working on your app!</Text>
+            <Text>App.js</Text>
           </View>
         </SafeAreaContainer>
       </ThemeProvider>
