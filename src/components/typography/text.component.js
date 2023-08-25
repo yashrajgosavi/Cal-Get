@@ -7,27 +7,10 @@ const defaultTextStyles = (theme) => `
   flex-wrap: wrap;
   margin-top: 0px;
   margin-bottom: 0px;
-  `;
-
-const caption = (theme) => `
-    font-family: ${theme.fonts.caption};
-    font-weight: ${theme.fontWeights.bold};
-    font-size: ${theme.fontSizes.caption};
-    color: ${theme.colors.text.caption};
-`;
-
-const title = (theme) => `
-    font-family: ${theme.fonts.heading};
-    font-weight: ${theme.fontWeights.bold};
-    font-size: ${theme.fontSizes.title};
-    color: ${theme.colors.text.heading};
 `;
 
 const body = (theme) => `
-    font-family: ${theme.fonts.body};
-    font-weight: ${theme.fontWeights.bold};
     font-size: ${theme.fontSizes.body};
-    color: ${theme.colors.text.primary};
 `;
 
 const hint = (theme) => `
@@ -38,19 +21,23 @@ const error = (theme) => `
     color: ${theme.colors.text.error};
 `;
 
+const caption = (theme) => `
+    font-size: ${theme.fontSizes.caption};
+    font-weight: ${theme.fontWeights.bold};
+`;
+
 const label = (theme) => `
     font-family: ${theme.fonts.heading};
-    font-weight: ${theme.fontWeights.medium};
     font-size: ${theme.fontSizes.body};
+    font-weight: ${theme.fontWeights.medium};
 `;
 
 const variants = {
-  caption,
-  title,
   body,
+  label,
+  caption,
   error,
   hint,
-  label,
 };
 
 export const Text = styled.Text`

@@ -1,12 +1,11 @@
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React from "react";
-import { Text } from "../../../components/typography/text.component";
+import { Mybutton, Text } from "../../../components/typography/text.component";
 import { Spacer } from "../../../components/spacer/spacer.component";
 
 const ThemeScreen = () => {
   return (
-    <View>
-      <Text variant="title">Title Oswald_400Regular</Text>
+    <View style={styles.container}>
       <Spacer size="medium" />
       <Text variant="body">Body</Text>
       <Spacer size="large" />
@@ -22,5 +21,13 @@ const ThemeScreen = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
 
 export default ThemeScreen;
