@@ -2,11 +2,7 @@ import React from "react";
 import { StatusBar as ExpoStatusBar } from "expo-status-bar";
 import { ThemeProvider } from "styled-components/native";
 
-import {
-  useFonts as useOswald,
-  Oswald_400Regular,
-} from "@expo-google-fonts/oswald";
-import { useFonts as useLato, Lato_400Regular } from "@expo-google-fonts/lato";
+import { useFonts } from "expo-font";
 
 import { theme } from "./src/infrastructure/theme";
 import { SafeArea } from "./src/components/utility/safe-area.component";
@@ -16,21 +12,19 @@ import { WindowSizeProvider } from "./src/services/window/window.context";
 import { AuthProvider } from "./src/services/authentication/authentication.context";
 
 export default function App() {
-  const [oswaldLoaded] = useOswald({
-    Oswald_400Regular,
+  const [fontsLoaded] = useFonts({
+    Oswald_400Regular: require("./assets/fonts/Oswald-Regular.ttf"),
+    Lato_400Regular: require("./assets/fonts/Lato-Regular.ttf"),
   });
 
-  const [latoLoaded] = useLato({
-    Lato_400Regular,
-  });
-
-  if (!oswaldLoaded || !latoLoaded) {
+  if (!fontsLoaded) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={theme.colors.brand.primary} />
       </View>
     );
   }
+
   return (
     <>
       <ThemeProvider theme={theme}>

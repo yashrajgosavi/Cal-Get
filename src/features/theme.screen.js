@@ -6,6 +6,7 @@ import { Spacer } from "../components/spacer/spacer.component";
 const ThemeScreen = () => {
   return (
     <View style={styles.container}>
+      <Text variant="heading">Heading Oswald_400Regular</Text>
       <Text variant="title">Title Oswald_400Regular</Text>
       <Spacer size="medium" />
       <Text variant="body">Body</Text>

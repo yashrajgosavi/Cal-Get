@@ -9,6 +9,12 @@ const defaultTextStyles = (theme) => `
   margin-bottom: 0px;
 `;
 
+const heading = (theme) => `
+  font-family: ${theme.fonts.body};
+  font-size: ${theme.fontSizes.h4};
+  color: ${theme.colors.text.heading};
+`;
+
 const title = (theme) => `
   font-family: ${theme.fonts.heading};
   font-weight: ${theme.fontWeights.bold};
@@ -41,6 +47,7 @@ const label = (theme) => `
 `;
 
 const variants = {
+  heading,
   title,
   body,
   caption,

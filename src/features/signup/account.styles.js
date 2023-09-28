@@ -1,10 +1,5 @@
-import {
-  ImageBackground,
-  Platform,
-  ScrollView,
-  TextInput,
-  View,
-} from "react-native";
+import { ImageBackground, Platform, ScrollView, View } from "react-native";
+import { Button, TextInput } from "react-native-paper";
 import styled from "styled-components/native";
 
 export const AccountScrollView = styled(ScrollView)`
@@ -42,13 +37,18 @@ export const AccountDivider = styled(View)`
   margin-bottom: 20px;
 `;
 
-export const AccountTextInput = styled(TextInput)`
-  height: 40px;
+export const AccountTextInput = styled(TextInput).attrs({
+  mode: "outlined",
+})`
   margin: 12px;
-  border-width: 1px;
-  padding: 10px;
-  padding-left: 30px; /* Add space for the icon */
   background-color: transparent;
   font-size: ${({ width }) => (width < 500 ? 14 : 16)}px;
-  width: ${({ width }) => (width < 500 ? 300 : 400)}px;
+  width: ${({ width }) => (width < 500 ? 250 : 350)}px;
+`;
+
+export const AccountButton = styled(Button).attrs({
+  mode: "contained",
+})`
+  margin: 15px;
+  margin-bottom: 30px;
 `;
