@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { StatusBar as ExpoStatusBar } from "expo-status-bar";
 import { ThemeProvider } from "styled-components/native";
 
@@ -16,18 +16,15 @@ import { WindowSizeProvider } from "./src/services/window/window.context";
 import { AuthProvider } from "./src/services/authentication/authentication.context";
 
 export default function App() {
-  const [oswaldLoaded] = useOswald({ Oswald_400Regular });
-  const [latoLoaded] = useLato({ Lato_400Regular });
+  const [oswaldLoaded] = useOswald({
+    Oswald_400Regular,
+  });
 
-  const [isFontsLoaded, setIsFontsLoaded] = useState(false);
+  const [latoLoaded] = useLato({
+    Lato_400Regular,
+  });
 
-  useEffect(() => {
-    if (oswaldLoaded && latoLoaded) {
-      setIsFontsLoaded(true);
-    }
-  }, [oswaldLoaded, latoLoaded]);
-
-  if (!isFontsLoaded) {
+  if (!oswaldLoaded || !latoLoaded) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={theme.colors.brand.primary} />
