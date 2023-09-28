@@ -10,8 +10,10 @@ import { useFonts as useLato, Lato_400Regular } from "@expo-google-fonts/lato";
 
 import { theme } from "./src/infrastructure/theme";
 import { SafeArea } from "./src/components/utility/safe-area.component";
-import ThemeScreen from "./src/features/theme.screen";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
+import SignupScreen from "./src/features/signup/signup.screen";
+import { WindowSizeProvider } from "./src/services/window/window.context";
+import { AuthProvider } from "./src/services/authentication/authentication.context";
 
 export default function App() {
   const [oswaldLoaded] = useOswald({ Oswald_400Regular });
@@ -36,7 +38,11 @@ export default function App() {
     <>
       <ThemeProvider theme={theme}>
         <SafeArea>
-          <ThemeScreen />
+          <WindowSizeProvider>
+            <AuthProvider>
+              <SignupScreen />
+            </AuthProvider>
+          </WindowSizeProvider>
         </SafeArea>
         <ExpoStatusBar
           style="auto"
