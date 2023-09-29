@@ -7,13 +7,13 @@ const ThemeScreen = () => {
   return (
     <View style={styles.container}>
       <Text variant="heading">Heading Oswald_400Regular</Text>
-      <Text variant="title">Title Oswald_400Regular</Text>
+      <Text variant="title">Title Lato_400Regular</Text>
       <Spacer size="medium" />
-      <Text variant="body">Body</Text>
+      <Text variant="body">Body Oswald_400Regular</Text>
       <Spacer size="large" />
       <Text>Default</Text>
       <Spacer size="xl" />
-      <Text variant="caption">Caption</Text>
+      <Text variant="caption">Caption Lato_400Regular</Text>
       <Spacer size="xxl" />
       <Text variant="hint">Hint</Text>
       <Spacer size="medium" />

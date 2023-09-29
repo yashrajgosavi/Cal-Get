@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     if (!email || !validateEmail(email)) {
-      setEmailError("Invalid email");
+      setEmailError("Invalid email format");
       isValid = false;
     } else {
       setEmailError("");
@@ -60,6 +60,25 @@ export const AuthProvider = ({ children }) => {
     return isValid;
   };
 
+  const validateSignInForm = () => {
+    let isValid = true;
+
+    if (!email || !validateEmail(email)) {
+      setEmailError("Invalid email format");
+      isValid = false;
+    } else {
+      setEmailError("");
+    }
+
+    if (pwd.length < 8 || pwd.length > 20) {
+      setPwdError("Password should be min 8 char and max 20 char");
+      isValid = false;
+    } else {
+      setPwdError("");
+    }
+    return isValid;
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -78,6 +97,7 @@ export const AuthProvider = ({ children }) => {
         pwdError,
         confirmPwdError,
         validateSignupForm,
+        validateSignInForm,
       }}
     >
       {children}

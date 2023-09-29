@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import {
   AccountBackground,
   AccountButton,
@@ -7,50 +7,27 @@ import {
   AccountScrollView,
   AccountTextInput,
 } from "../styles/account.styles";
-import { WindowContext } from "../../services/window/window.context";
 import { Text } from "../../components/typography/text.component";
-import { AuthContext } from "../../services/authentication/authentication.context";
 import { TextInput } from "react-native-paper";
+import { WindowContext } from "../../services/window/window.context";
+import { AuthContext } from "../../services/authentication/authentication.context";
 
-const SignupScreen = () => {
+const SignInScreen = () => {
   const windowDimensions = useContext(WindowContext);
-
   const {
-    name,
     email,
     pwd,
-    confirmPwd,
     icons,
-    setName,
     setEmail,
     setPwd,
-    setConfirmPwd,
-    setIcons,
     nameError,
     emailError,
     pwdError,
-    confirmPwdError,
-    validateSignupForm,
+    validateSignInForm,
   } = useContext(AuthContext);
 
-  useEffect(() => {
-    if (!confirmPwd) {
-      setIcons((prevIcons) => ({
-        ...prevIcons,
-        confirmPwd: "lock-question",
-      }));
-    } else if (pwd === confirmPwd) {
-      setIcons((prevIcons) => ({
-        ...prevIcons,
-        confirmPwd: "lock-open-check",
-      }));
-    } else {
-      setIcons((prevIcons) => ({ ...prevIcons, confirmPwd: "lock-alert" }));
-    }
-  }, [pwd, confirmPwd, setIcons]);
-
   const handleSubmit = () => {
-    if (validateSignupForm()) {
+    if (validateSignInForm()) {
       console.log("Form is valid");
       // handle form submission
     }
@@ -66,15 +43,9 @@ const SignupScreen = () => {
           width={windowDimensions.width}
           marginTop={windowDimensions.height}
         >
-          <Text variant="heading">Signup</Text>
+          <Text variant="heading">SignIn</Text>
           <AccountDivider />
-          <AccountTextInput
-            width={windowDimensions.width}
-            label="Enter Full Name"
-            value={name}
-            onChangeText={(newName) => setName(newName)}
-            left={<TextInput.Icon icon={icons.fullName} />}
-          />
+
           {nameError ? <Text variant="error">{nameError}</Text> : null}
           <AccountTextInput
             width={windowDimensions.width}
@@ -93,16 +64,6 @@ const SignupScreen = () => {
             left={<TextInput.Icon icon={icons.pwd} />}
           />
           {pwdError ? <Text variant="error">{pwdError}</Text> : null}
-          <AccountTextInput
-            width={windowDimensions.width}
-            label="Confirm Password"
-            value={confirmPwd}
-            onChangeText={(newConfirmPwd) => setConfirmPwd(newConfirmPwd)}
-            left={<TextInput.Icon icon={icons.confirmPwd} />}
-          />
-          {confirmPwdError ? (
-            <Text variant="error">{confirmPwdError}</Text>
-          ) : null}
           <AccountButton onPress={() => handleSubmit()}>Submit</AccountButton>
         </AccountCard>
       </AccountBackground>
@@ -110,4 +71,4 @@ const SignupScreen = () => {
   );
 };
 
-export default SignupScreen;
+export default SignInScreen;

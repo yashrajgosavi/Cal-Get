@@ -3,7 +3,7 @@ import { Button, TextInput } from "react-native-paper";
 import styled from "styled-components/native";
 
 export const AccountScrollView = styled(ScrollView)`
-  flex: auto;
+  flex: 1;
   scroll-behavior: smooth;
 `;
 
@@ -43,7 +43,7 @@ export const AccountTextInput = styled(TextInput).attrs({
   margin: 12px;
   background-color: transparent;
   font-size: ${({ width }) => (width < 500 ? 14 : 16)}px;
-  width: ${({ width }) => (width < 500 ? 250 : 350)}px;
+  width: ${({ width }) => (width < 500 ? 300 : 400)}px;
 `;
 
 export const AccountButton = styled(Button).attrs({
