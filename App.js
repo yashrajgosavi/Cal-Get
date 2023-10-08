@@ -7,9 +7,9 @@ import { useFonts } from "expo-font";
 import { theme } from "./src/infrastructure/theme";
 import { SafeArea } from "./src/components/utility/safe-area.component";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
-import SignupScreen from "./src/features/signup/signup.screen";
 import { WindowSizeProvider } from "./src/services/window/window.context";
 import { AuthProvider } from "./src/services/authentication/authentication.context";
+import SignInScreen from "./src/features/signin/signin.screen";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -31,7 +31,7 @@ export default function App() {
         <SafeArea>
           <WindowSizeProvider>
             <AuthProvider>
-              <SignupScreen />
+              <SignInScreen />
             </AuthProvider>
           </WindowSizeProvider>
         </SafeArea>

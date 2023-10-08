@@ -52,3 +52,8 @@ export const AccountButton = styled(Button).attrs({
   margin: 15px;
   margin-bottom: 30px;
 `;
+
+export const AccountButtonView = styled(View)`
+  flex-direction: row;
+  justify-content: space-between;
+`;

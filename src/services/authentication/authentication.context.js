@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { createContext, useState } from "react";
 
 export const AuthContext = createContext();
@@ -19,6 +20,11 @@ export const AuthProvider = ({ children }) => {
   const [emailError, setEmailError] = useState("");
   const [pwdError, setPwdError] = useState("");
   const [confirmPwdError, setConfirmPwdError] = useState("");
+
+  const [body, setBody] = useState({
+    status: "",
+    message: "",
+  });
 
   const validateEmail = () => {
     const emailRegex =
@@ -79,6 +85,74 @@ export const AuthProvider = ({ children }) => {
     return isValid;
   };
 
+  const clearFields = () => {
+    setName("");
+    setEmail("");
+    setPwd("");
+    setConfirmPwd("");
+    setNameError("");
+    setEmailError("");
+    setPwdError("");
+    setConfirmPwdError("");
+    setBody({ status: "", message: "" });
+  };
+
+  const handleSignup = async () => {
+    if (validateSignupForm()) {
+      console.log("Form is valid");
+      try {
+        const response = await axios.post(
+          "https://inspired-friendly-cougar.ngrok-free.app/api/user/signup",
+          {
+            email,
+            password: pwd,
+          }
+        );
+        const data = response.data;
+        if (response.status === 200) {
+          console.log(data);
+          setBody(data);
+          // handle successful signup
+        } else {
+          console.log(data);
+          setBody(data);
+          // handle unsuccessful signup
+        }
+      } catch (error) {
+        console.log(error);
+        // handle error
+      }
+    }
+  };
+
+  const handleSignin = async () => {
+    if (validateSignInForm()) {
+      console.log("Form is valid");
+      try {
+        const response = await axios.post(
+          "https://inspired-friendly-cougar.ngrok-free.app/api/user/signin",
+          {
+            email,
+            password: pwd,
+          }
+        );
+        const data = response.data;
+        if (response.status === 200) {
+          console.log(data);
+          setBody(data);
+          // handle successful signup
+        } else {
+          console.log(data);
+          setBody(data);
+          // handle unsuccessful signup
+        }
+      } catch (error) {
+        console.log(error);
+        // handle error
+      }
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -86,21 +160,29 @@ export const AuthProvider = ({ children }) => {
         email,
         pwd,
         confirmPwd,
-        icons,
+
         setName,
         setEmail,
         setPwd,
         setConfirmPwd,
+
+        icons,
         setIcons,
+
         nameError,
         emailError,
         pwdError,
         confirmPwdError,
-        validateSignupForm,
-        validateSignInForm,
+
+        body,
+
+        clearFields,
+        handleSignup,
+        handleSignin,
       }}
     >
       {children}
     </AuthContext.Provider>
   );
 };
+

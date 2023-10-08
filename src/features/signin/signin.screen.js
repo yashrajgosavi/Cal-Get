@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import {
   AccountBackground,
   AccountButton,
+  AccountButtonView,
   AccountCard,
   AccountDivider,
   AccountScrollView,
@@ -17,21 +18,19 @@ const SignInScreen = () => {
   const {
     email,
     pwd,
+
     icons,
+
     setEmail,
     setPwd,
-    nameError,
-    emailError,
-    pwdError,
-    validateSignInForm,
-  } = useContext(AuthContext);
 
-  const handleSubmit = () => {
-    if (validateSignInForm()) {
-      console.log("Form is valid");
-      // handle form submission
-    }
-  };
+    emailError,
+
+    body,
+
+    clearFields,
+    handleSignin,
+  } = useContext(AuthContext);
 
   return (
     <AccountScrollView width={windowDimensions.width}>
@@ -45,8 +44,6 @@ const SignInScreen = () => {
         >
           <Text variant="heading">SignIn</Text>
           <AccountDivider />
-
-          {nameError ? <Text variant="error">{nameError}</Text> : null}
           <AccountTextInput
             width={windowDimensions.width}
             label="Enter Email"
@@ -55,7 +52,6 @@ const SignInScreen = () => {
             left={<TextInput.Icon icon={icons.email} />}
           />
           {emailError ? <Text variant="error">{emailError}</Text> : null}
-
           <AccountTextInput
             width={windowDimensions.width}
             label="Enter Password"
@@ -63,8 +59,15 @@ const SignInScreen = () => {
             onChangeText={(newPwd) => setPwd(newPwd)}
             left={<TextInput.Icon icon={icons.pwd} />}
           />
-          {pwdError ? <Text variant="error">{pwdError}</Text> : null}
-          <AccountButton onPress={() => handleSubmit()}>Submit</AccountButton>
+          {body.message && body.status === "SUCCESS" ? (
+            <Text variant="success">{body.message}</Text>
+          ) : (
+            <Text variant="error">{body.message}</Text>
+          )}
+          <AccountButtonView>
+            <AccountButton onPress={() => handleSignin()}>Submit</AccountButton>
+            <AccountButton onPress={clearFields}>Clear</AccountButton>
+          </AccountButtonView>
         </AccountCard>
       </AccountBackground>
     </AccountScrollView>

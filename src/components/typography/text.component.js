@@ -39,6 +39,9 @@ const hint = (theme) => `
 const error = (theme) => `
     color: ${theme.colors.text.error};
 `;
+const success = (theme) => `
+    color: ${theme.colors.text.success};
+`;
 
 const label = (theme) => `
     font-family: ${theme.fonts.heading};
@@ -52,6 +55,7 @@ const variants = {
   body,
   caption,
   error,
+  success,
   hint,
   label,
 };

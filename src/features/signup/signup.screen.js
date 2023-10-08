@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from "react";
 import {
   AccountBackground,
   AccountButton,
+  AccountButtonView,
   AccountCard,
   AccountDivider,
   AccountScrollView,
@@ -20,17 +21,24 @@ const SignupScreen = () => {
     email,
     pwd,
     confirmPwd,
-    icons,
+
     setName,
     setEmail,
     setPwd,
     setConfirmPwd,
+
+    icons,
     setIcons,
+
     nameError,
     emailError,
     pwdError,
     confirmPwdError,
-    validateSignupForm,
+
+    body,
+
+    clearFields,
+    handleSignup,
   } = useContext(AuthContext);
 
   useEffect(() => {
@@ -49,13 +57,6 @@ const SignupScreen = () => {
     }
   }, [pwd, confirmPwd, setIcons]);
 
-  const handleSubmit = () => {
-    if (validateSignupForm()) {
-      console.log("Form is valid");
-      // handle form submission
-    }
-  };
-
   return (
     <AccountScrollView width={windowDimensions.width}>
       <AccountBackground
@@ -66,7 +67,7 @@ const SignupScreen = () => {
           width={windowDimensions.width}
           marginTop={windowDimensions.height}
         >
-          <Text variant="heading">Signup</Text>
+          <Text variant="heading">Signup Screen</Text>
           <AccountDivider />
           <AccountTextInput
             width={windowDimensions.width}
@@ -103,7 +104,15 @@ const SignupScreen = () => {
           {confirmPwdError ? (
             <Text variant="error">{confirmPwdError}</Text>
           ) : null}
-          <AccountButton onPress={() => handleSubmit()}>Submit</AccountButton>
+          {body.message && body.status === "SUCCESS" ? (
+            <Text variant="success">{body.message}</Text>
+          ) : (
+            <Text variant="error">{body.message}</Text>
+          )}
+          <AccountButtonView>
+            <AccountButton onPress={() => handleSignup()}>Submit</AccountButton>
+            <AccountButton onPress={clearFields}>Clear</AccountButton>
+          </AccountButtonView>
         </AccountCard>
       </AccountBackground>
     </AccountScrollView>
