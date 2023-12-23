@@ -15,22 +15,8 @@ import { AuthContext } from "../../services/authentication/authentication.contex
 
 const SignInScreen = () => {
   const windowDimensions = useContext(WindowContext);
-  const {
-    email,
-    pwd,
 
-    icons,
-
-    setEmail,
-    setPwd,
-
-    emailError,
-
-    body,
-
-    clearFields,
-    handleSignin,
-  } = useContext(AuthContext);
+  const [state, dispatch, clearFields, handleSignin] = useContext(AuthContext);
 
   return (
     <AccountScrollView width={windowDimensions.width}>
@@ -47,26 +33,35 @@ const SignInScreen = () => {
           <AccountTextInput
             width={windowDimensions.width}
             label="Enter Email"
-            value={email}
-            onChangeText={(newEmail) => setEmail(newEmail)}
-            left={<TextInput.Icon icon={icons.email} />}
+            value={state.email}
+            onChangeText={(newEmail) =>
+              dispatch({ type: "SET_EMAIL", email: newEmail })
+            }
+            left={<TextInput.Icon icon={state.icons.email} />}
           />
-          {emailError ? <Text variant="error">{emailError}</Text> : null}
+          {state.emailError ? (
+            <Text variant="error">{state.emailError}</Text>
+          ) : null}
           <AccountTextInput
             width={windowDimensions.width}
             label="Enter Password"
-            value={pwd}
-            onChangeText={(newPwd) => setPwd(newPwd)}
-            left={<TextInput.Icon icon={icons.pwd} />}
+            value={state.pwd}
+            onChangeText={(newPwd) =>
+              dispatch({ type: "SET_PWD", pwd: newPwd })
+            }
+            left={<TextInput.Icon icon={state.icons.pwd} />}
           />
-          {body.message && body.status === "SUCCESS" ? (
-            <Text variant="success">{body.message}</Text>
+          {state.pwdError ? (
+            <Text variant="error">{state.pwdError}</Text>
+          ) : null}
+          {state.body.message && state.body.status === "SUCCESS" ? (
+            <Text variant="success">{state.body.message}</Text>
           ) : (
-            <Text variant="error">{body.message}</Text>
+            <Text variant="error">{state.body.message}</Text>
           )}
           <AccountButtonView>
             <AccountButton onPress={() => handleSignin()}>Submit</AccountButton>
-            <AccountButton onPress={clearFields}>Clear</AccountButton>
+            <AccountButton onPress={() => clearFields()}>Clear</AccountButton>
           </AccountButtonView>
         </AccountCard>
       </AccountBackground>

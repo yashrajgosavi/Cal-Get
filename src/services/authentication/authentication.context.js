@@ -1,121 +1,144 @@
 import axios from "axios";
-import React, { createContext, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useEffect,
+  useReducer,
+} from "react";
 
 export const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [pwd, setPwd] = useState("");
-  const [confirmPwd, setConfirmPwd] = useState("");
-
-  const [icons, setIcons] = useState({
+const initialState = {
+  token: "",
+  name: "",
+  email: "",
+  pwd: "",
+  confirmPwd: "",
+  icons: {
     fullName: "account",
     email: "email",
     pwd: "lock",
     confirmPwd: "lock-question",
-  });
-
-  const [nameError, setNameError] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [pwdError, setPwdError] = useState("");
-  const [confirmPwdError, setConfirmPwdError] = useState("");
-
-  const [body, setBody] = useState({
+  },
+  nameError: "",
+  emailError: "",
+  pwdError: "",
+  confirmPwdError: "",
+  body: {
     status: "",
     message: "",
-  });
+  },
+};
 
-  const validateEmail = () => {
-    const emailRegex =
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    return emailRegex.test(email);
-  };
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "SET_TOKEN":
+      return { ...state, token: action.token };
+    case "SET_NAME":
+      return { ...state, name: action.name };
+    case "SET_EMAIL":
+      return { ...state, email: action.email };
+    case "SET_PWD":
+      return { ...state, pwd: action.pwd };
+    case "SET_CONFIRM_PWD":
+      return { ...state, confirmPwd: action.confirmPwd };
+    case "SET_NAME_ERROR":
+      return { ...state, nameError: action.nameError };
+    case "SET_EMAIL_ERROR":
+      return { ...state, emailError: action.emailError };
+    case "SET_PWD_ERROR":
+      return { ...state, pwdError: action.pwdError };
+    case "SET_CONFIRM_PWD_ERROR":
+      return { ...state, confirmPwdError: action.confirmPwdError };
+    case "SET_BODY":
+      return { ...state, body: action.body };
+    case "SET_ICONS":
+      return { ...state, icons: action.icons };
+    default:
+      return state;
+  }
+};
 
-  const validateSignupForm = () => {
-    let isValid = true;
+export const AuthProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
 
-    if (!name) {
-      setNameError("Name is required");
-      isValid = false;
-    } else {
-      setNameError("");
-    }
+  const clearFields = useCallback(() => {
+    dispatch({ type: "SET_NAME", name: "" });
+    dispatch({ type: "SET_EMAIL", email: "" });
+    dispatch({ type: "SET_PWD", pwd: "" });
+    dispatch({ type: "SET_CONFIRM_PWD", confirmPwd: "" });
+    dispatch({ type: "SET_NAME_ERROR", nameError: "" });
+    dispatch({ type: "SET_EMAIL_ERROR", emailError: "" });
+    dispatch({ type: "SET_PWD_ERROR", pwdError: "" });
+    dispatch({ type: "SET_CONFIRM_PWD_ERROR", confirmPwdError: "" });
+    dispatch({
+      type: "SET_BODY",
+      body: {
+        status: "",
+        message: "",
+      },
+    });
+  }, [dispatch]);
 
-    if (!email || !validateEmail(email)) {
-      setEmailError("Invalid email format");
-      isValid = false;
-    } else {
-      setEmailError("");
-    }
+  const handleSignup = useCallback(async () => {
+    const validateSignupForm = () => {
+      const emailRegex =
+        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+      dispatch({ type: "SET_NAME_ERROR", nameError: "" });
+      dispatch({ type: "SET_EMAIL_ERROR", emailError: "" });
+      dispatch({ type: "SET_PWD_ERROR", pwdError: "" });
+      dispatch({ type: "SET_CONFIRM_PWD_ERROR", confirmPwdError: "" });
+      let isValid = true;
+      let nameError = state.name ? "" : "Name is required";
+      let emailError = emailRegex.test(state.email)
+        ? ""
+        : "Invalid email format";
 
-    if (pwd.length < 8 || pwd.length > 20) {
-      setPwdError("Password should be min 8 char and max 20 char");
-      isValid = false;
-    } else {
-      setPwdError("");
-    }
+      let pwdError =
+        state.pwd.length >= 8 && state.pwd.length <= 20
+          ? ""
+          : "Password should be min 8 char and max 20 char";
+      let confirmPwdError =
+        state.pwd === state.confirmPwd
+          ? ""
+          : "Password and confirm password should be same";
 
-    if (pwd !== confirmPwd) {
-      setConfirmPwdError("Password and confirm password should be same");
-      isValid = false;
-    } else {
-      setConfirmPwdError("");
-    }
+      if (nameError || emailError || pwdError || confirmPwdError) {
+        dispatch({ type: "SET_NAME_ERROR", nameError });
+        dispatch({ type: "SET_EMAIL_ERROR", emailError });
+        dispatch({ type: "SET_PWD_ERROR", pwdError });
+        dispatch({ type: "SET_CONFIRM_PWD_ERROR", confirmPwdError });
+        isValid = false;
+      }
 
-    return isValid;
-  };
+      return isValid;
+    };
 
-  const validateSignInForm = () => {
-    let isValid = true;
-
-    if (!email || !validateEmail(email)) {
-      setEmailError("Invalid email format");
-      isValid = false;
-    } else {
-      setEmailError("");
-    }
-
-    if (pwd.length < 8 || pwd.length > 20) {
-      setPwdError("Password should be min 8 char and max 20 char");
-      isValid = false;
-    } else {
-      setPwdError("");
-    }
-    return isValid;
-  };
-
-  const clearFields = () => {
-    setName("");
-    setEmail("");
-    setPwd("");
-    setConfirmPwd("");
-    setNameError("");
-    setEmailError("");
-    setPwdError("");
-    setConfirmPwdError("");
-    setBody({ status: "", message: "" });
-  };
-
-  const handleSignup = async () => {
     if (validateSignupForm()) {
       console.log("Form is valid");
       try {
         const response = await axios.post(
           "https://inspired-friendly-cougar.ngrok-free.app/api/user/signup",
           {
-            email,
-            password: pwd,
+            name: state.name,
+            email: state.email,
+            password: state.pwd,
           }
         );
         const data = response.data;
         if (response.status === 200) {
           console.log(data);
-          setBody(data);
+          dispatch({
+            type: "SET_BODY",
+            body: data,
+          });
           // handle successful signup
         } else {
           console.log(data);
-          setBody(data);
+          dispatch({
+            type: "SET_BODY",
+            body: data,
+          });
           // handle unsuccessful signup
         }
       } catch (error) {
@@ -123,66 +146,70 @@ export const AuthProvider = ({ children }) => {
         // handle error
       }
     }
-  };
+  }, [state, dispatch]);
 
-  const handleSignin = async () => {
+  useEffect(() => {}, [state.body, state.token]);
+
+  const handleSignin = useCallback(async () => {
+    const validateSignInForm = () => {
+      const emailRegex =
+        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+      dispatch({ type: "SET_NAME_ERROR", nameError: "" });
+      dispatch({ type: "SET_EMAIL_ERROR", emailError: "" });
+      dispatch({ type: "SET_PWD_ERROR", pwdError: "" });
+      dispatch({ type: "SET_CONFIRM_PWD_ERROR", confirmPwdError: "" });
+      let isValid = true;
+      let emailError = emailRegex.test(state.email)
+        ? ""
+        : "Invalid email format";
+      let pwdError =
+        state.pwd.length >= 8 && state.pwd.length <= 20
+          ? ""
+          : "Password should be min 8 char and max 20 char";
+
+      if (emailError || pwdError) {
+        dispatch({ type: "SET_EMAIL_ERROR", emailError });
+        dispatch({ type: "SET_PWD_ERROR", pwdError });
+        isValid = false;
+      }
+
+      return isValid;
+    };
+
     if (validateSignInForm()) {
       console.log("Form is valid");
       try {
         const response = await axios.post(
           "https://inspired-friendly-cougar.ngrok-free.app/api/user/signin",
           {
-            email,
-            password: pwd,
+            email: state.email,
+            password: state.pwd,
           }
         );
-        const data = response.data;
+        dispatch({
+          type: "SET_BODY",
+          body: response.data,
+        });
+
         if (response.status === 200) {
-          console.log(data);
-          setBody(data);
-          // handle successful signup
-        } else {
-          console.log(data);
-          setBody(data);
-          // handle unsuccessful signup
+          dispatch({
+            type: "SET_TOKEN",
+            token: response.data.token,
+          });
+          // handle successful signin
         }
       } catch (error) {
         console.log(error);
         // handle error
       }
     }
-  };
+  }, [state, dispatch]);
 
   return (
     <AuthContext.Provider
-      value={{
-        name,
-        email,
-        pwd,
-        confirmPwd,
-
-        setName,
-        setEmail,
-        setPwd,
-        setConfirmPwd,
-
-        icons,
-        setIcons,
-
-        nameError,
-        emailError,
-        pwdError,
-        confirmPwdError,
-
-        body,
-
-        clearFields,
-        handleSignup,
-        handleSignin,
-      }}
+      value={[state, dispatch, clearFields, handleSignin, handleSignup]}
     >
       {children}
     </AuthContext.Provider>
   );
 };
-
