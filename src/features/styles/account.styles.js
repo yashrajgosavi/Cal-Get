@@ -11,7 +11,7 @@ export const AccountBackground = styled(ImageBackground).attrs({
   source: require("../../../assets/home_bg.jpg"),
 })`
   flex: auto;
-  height: ${({ height }) => height}px;
+  height: ${({ height }) => height + 48}px;
   align-items: center;
   justify-content: flex-start;
 `;
@@ -25,8 +25,8 @@ export const AccountCard = styled(View)`
   max-width: 500px;
   height: auto;
   margin-top: ${Platform.OS === "web"
-    ? ({ marginTop }) => marginTop * 0.2
-    : ({ marginTop }) => marginTop * 0.15}px;
+    ? ({ marginTop }) => marginTop * 0.05
+    : ({ marginTop }) => marginTop * 0.125}px;
 `;
 
 export const AccountDivider = styled(View)`
@@ -43,7 +43,7 @@ export const AccountTextInput = styled(TextInput).attrs({
   margin: 12px;
   background-color: transparent;
   font-size: ${({ width }) => (width < 500 ? 14 : 16)}px;
-  width: ${({ width }) => (width < 500 ? 300 : 400)}px;
+  width: ${({ width }) => (width < 500 ? 250 : 400)}px;
 `;
 
 export const AccountButton = styled(Button).attrs({

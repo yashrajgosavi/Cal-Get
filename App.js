@@ -9,7 +9,7 @@ import { SafeArea } from "./src/components/utility/safe-area.component";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { WindowSizeProvider } from "./src/services/window/window.context";
 import { AuthProvider } from "./src/services/authentication/authentication.context";
-import SignInScreen from "./src/features/signin/signin.screen";
+import AppNav from "./src/services/navigation/navigation.context";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -31,7 +31,7 @@ export default function App() {
         <SafeArea>
           <WindowSizeProvider>
             <AuthProvider>
-              <SignInScreen />
+              <AppNav />
             </AuthProvider>
           </WindowSizeProvider>
         </SafeArea>

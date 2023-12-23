@@ -9,11 +9,12 @@ import {
   AccountTextInput,
 } from "../styles/account.styles";
 import { Text } from "../../components/typography/text.component";
-import { TextInput } from "react-native-paper";
+import { Button, TextInput } from "react-native-paper";
 import { WindowContext } from "../../services/window/window.context";
 import { AuthContext } from "../../services/authentication/authentication.context";
+import { View } from "react-native";
 
-const SignInScreen = () => {
+const SignInScreen = ({ navigation }) => {
   const windowDimensions = useContext(WindowContext);
 
   const [state, dispatch, clearFields, handleSignin] = useContext(AuthContext);
@@ -63,6 +64,12 @@ const SignInScreen = () => {
             <AccountButton onPress={() => handleSignin()}>Submit</AccountButton>
             <AccountButton onPress={() => clearFields()}>Clear</AccountButton>
           </AccountButtonView>
+          <View>
+            <Text variant="caption">Don't have account?</Text>
+            <Button onPress={() => navigation.navigate("SignUp")}>
+              SignUp
+            </Button>
+          </View>
         </AccountCard>
       </AccountBackground>
     </AccountScrollView>

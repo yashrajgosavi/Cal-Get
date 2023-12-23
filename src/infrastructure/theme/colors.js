@@ -27,7 +27,7 @@ export const colors = {
     success: "#138000",
     heading: "#000000",
     subheading: "#6E6E6E",
-    caption: "#B3B3B3",
+    caption: "#2F4858",
   },
   statusbar: {
     signup: "#c2ccce",
