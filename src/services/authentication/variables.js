@@ -1,5 +1,8 @@
 export const initialState = {
-  token: "",
+  getAuth: {
+    isLoggedIn: false,
+    token: null,
+  },
   name: "",
   email: "user1@gmail.com",
   pwd: "12345678",
@@ -43,8 +46,10 @@ export const reducer = (state, action) => {
       return { ...state, body: action.body };
     case "SET_BODY_DATA":
       return { ...state, data: action.data };
-    case "SET_TOKEN":
-      return { ...state, token: action.token };
+    case "SET_IS_LOGGED_IN":
+      return { ...state, isLoggedIn: action.isLoggedIn };
+    case "GET_AUTH":
+      return { ...state, getAuth: action.getAuth };
     case "SET_ICONS":
       return { ...state, icons: action.icons };
     default:

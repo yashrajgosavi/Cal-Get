@@ -1,12 +1,42 @@
-import React, { createContext, useCallback, useReducer } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useEffect,
+  useReducer,
+} from "react";
 import { initialState, reducer } from "./variables";
 import { validateSignInForm, validateSignupForm } from "./validations";
-import { signInUser, signUpUser } from "./apiCalls";
+import { signInUser, signUpUser } from "./api.calls";
+import { getASData } from "./store.function";
 
 export const AuthContext = createContext();
 
-export default function AuthProvider({ children, navigate }) {
+export default function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      let userResponseData = await getASData("userResponse");
+      if (userResponseData !== null) {
+        dispatch({
+          type: "GET_AUTH",
+          getAuth: {
+            isLoggedIn: true,
+            token: userResponseData.token,
+          },
+        });
+      } else {
+        dispatch({
+          type: "GET_AUTH",
+          getAuth: {
+            isLoggedIn: false,
+            token: null,
+          },
+        });
+      }
+    };
+    checkAuth();
+  }, [state.getAuth]);
 
   const clearInputFields = () => {
     dispatch({ type: "SET_NAME", name: "" });
