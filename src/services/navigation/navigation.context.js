@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import SignInScreen from "../../features/signin/signin.screen";
 import SignupScreen from "../../features/signup/signup.screen";
 import { NavigationContainer } from "@react-navigation/native";
+import { AuthContext } from "../authentication/authentication.context";
+import Dashboard from "../../features/dashboard/dashboard.screen";
 
 const CreateStackNav = createStackNavigator();
 
@@ -28,9 +30,10 @@ const AuthStackNav = () => {
 };
 
 const AppNav = () => {
+  const [state] = useContext(AuthContext);
   return (
     <NavigationContainer>
-      <AuthStackNav />
+      {state.token === "" ? <AuthStackNav /> : <Dashboard />}
     </NavigationContainer>
   );
 };

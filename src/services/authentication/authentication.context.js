@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import React, {
   createContext,
@@ -11,8 +12,8 @@ export const AuthContext = createContext();
 const initialState = {
   token: "",
   name: "",
-  email: "",
-  pwd: "",
+  email: "user1@gmail.com",
+  pwd: "12345678",
   confirmPwd: "",
   icons: {
     fullName: "account",
@@ -28,12 +29,11 @@ const initialState = {
     status: "",
     message: "",
   },
+  data: {},
 };
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case "SET_TOKEN":
-      return { ...state, token: action.token };
     case "SET_NAME":
       return { ...state, name: action.name };
     case "SET_EMAIL":
@@ -52,6 +52,10 @@ const reducer = (state, action) => {
       return { ...state, confirmPwdError: action.confirmPwdError };
     case "SET_BODY":
       return { ...state, body: action.body };
+    case "SET_BODY_DATA":
+      return { ...state, data: action.data };
+    case "SET_TOKEN":
+      return { ...state, token: action.token };
     case "SET_ICONS":
       return { ...state, icons: action.icons };
     default:
@@ -81,6 +85,13 @@ export const AuthProvider = ({ children }) => {
   }, [dispatch]);
 
   const handleSignup = useCallback(async () => {
+    dispatch({
+      type: "SET_BODY",
+      body: {
+        status: "",
+        message: "",
+      },
+    });
     const validateSignupForm = () => {
       const emailRegex =
         /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
@@ -151,6 +162,13 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {}, [state.body, state.token]);
 
   const handleSignin = useCallback(async () => {
+    dispatch({
+      type: "SET_BODY",
+      body: {
+        status: "",
+        message: "",
+      },
+    });
     const validateSignInForm = () => {
       const emailRegex =
         /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
@@ -192,10 +210,7 @@ export const AuthProvider = ({ children }) => {
         });
 
         if (response.status === 200) {
-          dispatch({
-            type: "SET_TOKEN",
-            token: response.data.token,
-          });
+          console.log(response.data);
           // handle successful signin
         }
       } catch (error) {
@@ -213,3 +228,4 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
