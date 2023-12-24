@@ -8,8 +8,8 @@ import { theme } from "./src/infrastructure/theme";
 import { SafeArea } from "./src/components/utility/safe-area.component";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { WindowSizeProvider } from "./src/services/window/window.context";
-import { AuthProvider } from "./src/services/authentication/authentication.context";
 import AppNav from "./src/services/navigation/navigation.context";
+import AuthProvider from "./src/services/authentication/authentication.context";
 
 export default function App() {
   const [fontsLoaded] = useFonts({

@@ -17,7 +17,14 @@ import { View } from "react-native";
 const SignInScreen = ({ navigation }) => {
   const windowDimensions = useContext(WindowContext);
 
-  const [state, dispatch, clearFields, handleSignin] = useContext(AuthContext);
+  const [
+    state,
+    dispatch,
+    clearInputFields,
+    handleSignin,
+    handleSignup,
+    clearErrorFields,
+  ] = useContext(AuthContext);
 
   return (
     <AccountScrollView width={windowDimensions.width}>
@@ -62,11 +69,18 @@ const SignInScreen = ({ navigation }) => {
           )}
           <AccountButtonView>
             <AccountButton onPress={() => handleSignin()}>Submit</AccountButton>
-            <AccountButton onPress={() => clearFields()}>Clear</AccountButton>
+            <AccountButton onPress={() => clearInputFields()}>
+              Clear
+            </AccountButton>
           </AccountButtonView>
           <View>
             <Text variant="caption">Don't have account?</Text>
-            <Button onPress={() => navigation.navigate("SignUp")}>
+            <Button
+              onPress={() => {
+                navigation.navigate("SignUp");
+                clearErrorFields();
+              }}
+            >
               SignUp
             </Button>
           </View>

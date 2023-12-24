@@ -17,8 +17,14 @@ import { View } from "react-native";
 const SignupScreen = ({ navigation }) => {
   const windowDimensions = useContext(WindowContext);
 
-  const [state, dispatch, clearFields, handleSignin, handleSignup] =
-    useContext(AuthContext);
+  const [
+    state,
+    dispatch,
+    clearInputFields,
+    handleSignin,
+    handleSignup,
+    clearErrorFields,
+  ] = useContext(AuthContext);
 
   useEffect(() => {
     let newIcons = {};
@@ -119,11 +125,20 @@ const SignupScreen = ({ navigation }) => {
           )}
           <AccountButtonView>
             <AccountButton onPress={() => handleSignup()}>Submit</AccountButton>
-            <AccountButton onPress={() => clearFields()}>Clear</AccountButton>
+            <AccountButton onPress={() => clearInputFields()}>
+              Clear
+            </AccountButton>
           </AccountButtonView>
           <View>
             <Text variant="caption">Already have a account?</Text>
-            <Button onPress={() => navigation.navigate("SignIn")}>Login</Button>
+            <Button
+              onPress={() => {
+                navigation.goBack();
+                clearErrorFields();
+              }}
+            >
+              Login
+            </Button>
           </View>
         </AccountCard>
       </AccountBackground>

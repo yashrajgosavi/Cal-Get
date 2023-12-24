@@ -6,6 +6,7 @@ import { View } from "react-native-web";
 
 const Dashboard = () => {
   const [state, dispatch] = useContext(AuthContext);
+  console.log(state);
   return (
     <View>
       <Text variant="title">Dashboard</Text>
@@ -21,4 +22,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
