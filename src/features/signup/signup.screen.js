@@ -17,14 +17,14 @@ import { View } from "react-native";
 const SignupScreen = ({ navigation }) => {
   const windowDimensions = useContext(WindowContext);
 
-  const [
+  const {
     state,
     dispatch,
     clearInputFields,
     handleSignin,
     handleSignup,
     clearErrorFields,
-  ] = useContext(AuthContext);
+  } = useContext(AuthContext);
 
   useEffect(() => {
     let newIcons = {};

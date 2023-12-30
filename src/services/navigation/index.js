@@ -5,7 +5,7 @@ import Dashboard from "../../features/dashboard/dashboard.screen";
 import { AccountNavigator } from "./account.navigator";
 
 const AppNav = () => {
-  const [state] = useContext(AuthContext);
+  const { state } = useContext(AuthContext);
 
   return (
     <NavigationContainer>

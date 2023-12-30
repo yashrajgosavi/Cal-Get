@@ -6,14 +6,7 @@ import { View } from "react-native";
 import { removeASData } from "../../services/authentication/store.function";
 
 const Dashboard = () => {
-  const [
-    state,
-    dispatch,
-    clearInputFields,
-    handleSignin,
-    handleSignup,
-    clearErrorFields,
-  ] = useContext(AuthContext);
+  const { clearErrorFields } = useContext(AuthContext);
   return (
     <View>
       <Text variant="title">Dashboard</Text>

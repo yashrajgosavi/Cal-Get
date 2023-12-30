@@ -36,7 +36,7 @@ export default function AuthProvider({ children }) {
       }
     };
     checkAuth();
-  }, [state.getAuth]);
+  }, [state.body]);
 
   const clearInputFields = () => {
     dispatch({ type: "SET_NAME", name: "" });
@@ -78,14 +78,14 @@ export default function AuthProvider({ children }) {
   }, [state, dispatch]);
   return (
     <AuthContext.Provider
-      value={[
+      value={{
         state,
         dispatch,
         clearInputFields,
         handleSignin,
         handleSignup,
         clearErrorFields,
-      ]}
+      }}
     >
       {children}
     </AuthContext.Provider>

@@ -17,14 +17,8 @@ import { View } from "react-native";
 const SignInScreen = ({ navigation }) => {
   const windowDimensions = useContext(WindowContext);
 
-  const [
-    state,
-    dispatch,
-    clearInputFields,
-    handleSignin,
-    handleSignup,
-    clearErrorFields,
-  ] = useContext(AuthContext);
+  const { state, dispatch, clearInputFields, handleSignin, clearErrorFields } =
+    useContext(AuthContext);
 
   return (
     <AccountScrollView width={windowDimensions.width}>
