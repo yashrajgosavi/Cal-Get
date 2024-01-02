@@ -50,7 +50,7 @@ const SignupScreen = ({ navigation }) => {
     if (JSON.stringify(newIcons) !== JSON.stringify(state.iconState.icons)) {
       dispatch(actions.setIcons(newIcons));
     }
-  }, [state.userDetailState]);
+  }, [state, actions, dispatch]);
 
   return (
     <AccountScrollView width={windowDimensions.width}>

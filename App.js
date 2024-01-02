@@ -9,7 +9,7 @@ import { theme } from "./src/infrastructure/theme";
 import { SafeArea } from "./src/components/utility/safe-area.component";
 import { WindowSizeProvider } from "./src/services/window/window.context";
 import AuthProvider from "./src/services/authentication/authentication.context";
-import SignInScreen from "./src/features/signin/signin.screen";
+import AppNav from "./src/services/navigation";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -30,7 +30,7 @@ export default function App() {
       <SafeArea>
         <WindowSizeProvider>
           <AuthProvider>
-            <SignInScreen />
+            <AppNav />
             <ExpoStatusBar
               style="auto"
               backgroundColor={theme.colors.statusbar.signup}
