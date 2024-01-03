@@ -48,7 +48,7 @@ export const AccountTextInput = styled(TextInput).attrs({
 `;
 
 export const AccountButton = styled(Button).attrs({
-  mode: "contained",
+  mode: "outlined",
 })`
   margin: 15px;
   margin-bottom: 30px;

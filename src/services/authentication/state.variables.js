@@ -1,8 +1,8 @@
 export const initialState = {
   userDetailState: {
     name: "",
-    email: "user1@gmail.com",
-    pwd: "12345678",
+    email: "",
+    pwd: "",
     confirmPwd: "",
   },
   errorState: {
@@ -23,8 +23,9 @@ export const initialState = {
     isLoggedIn: false,
     token: null,
   },
-  apiResponseState: {
-    body: {},
+  apiResponseBody: {
+    status: "",
+    messages: "",
     data: {},
   },
 };
@@ -95,13 +96,44 @@ export const reducer = (state, action) => {
     case "SET_BODY":
       return {
         ...state,
-        apiResponseState: { ...state.apiResponseState, body: action.body },
+        apiResponseBody: { ...state.apiResponseBody, ...action.body },
       };
-    case "SET_BODY_DATA":
+    case "SET_STATUS":
       return {
         ...state,
-        apiResponseState: { ...state.apiResponseState, data: action.data },
+        apiResponseBody: { ...state.apiResponseBody, status: action.status },
       };
+
+    case "SET_MESSAGES":
+      return {
+        ...state,
+        apiResponseBody: {
+          ...state.apiResponseBody,
+          messages: action.messages,
+        },
+      };
+
+    case "SET_DATA":
+      return {
+        ...state,
+        apiResponseBody: { ...state.apiResponseBody, data: action.data },
+      };
+    case "RESET_STATE":
+      if (action.stateName) {
+        const resetValue =
+          typeof state[action.stateName][
+            Object.keys(state[action.stateName])[0]
+          ] === "string"
+            ? ""
+            : {};
+        return {
+          ...state,
+          [action.stateName]: resetValue,
+        };
+      } else {
+        return initialState;
+      }
+
     default:
       return state;
   }
@@ -125,6 +157,22 @@ const actions = {
     type: "SET_CONFIRM_PWD",
     confirmPwd,
   }),
+  setNameError: (nameError) => ({
+    type: "SET_NAME_ERROR",
+    nameError,
+  }),
+  setEmailError: (emailError) => ({
+    type: "SET_EMAIL_ERROR",
+    emailError,
+  }),
+  setPwdError: (pwdError) => ({
+    type: "SET_PWD_ERROR",
+    pwdError,
+  }),
+  setConfirmPwdError: (confirmPwdError) => ({
+    type: "SET_CONFIRM_PWD_ERROR",
+    confirmPwdError,
+  }),
   setIcons: (icons) => ({
     type: "SET_ICONS",
     icons,
@@ -141,9 +189,23 @@ const actions = {
     type: "SET_BODY",
     body,
   }),
+  setStatus: (status) => ({
+    type: "SET_STATUS",
+    status,
+  }),
+
+  setMessages: (messages) => ({
+    type: "SET_MESSAGES",
+    messages,
+  }),
+
   setData: (data) => ({
-    type: "SET_BODY_DATA",
+    type: "SET_DATA",
     data,
+  }),
+  resetState: (stateName) => ({
+    type: "RESET_STATE",
+    stateName,
   }),
 };
 

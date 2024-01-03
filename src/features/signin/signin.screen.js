@@ -19,7 +19,7 @@ import { Warning } from "../../components/warning/warning.component";
 const SignInScreen = ({ navigation }) => {
   const windowDimensions = useContext(WindowContext);
 
-  const { state, dispatch, actions } = useContext(AuthContext);
+  const { state, dispatch, actions, handleSignin } = useContext(AuthContext);
 
   return (
     <AccountScrollView width={windowDimensions.width}>
@@ -64,26 +64,22 @@ const SignInScreen = ({ navigation }) => {
           />
 
           <Warning
-            condition={
-              state.apiResponseState.body.message &&
-              state.apiResponseState.body.status === "SUCCESS"
-            }
+            condition={state.apiResponseBody.status === "SUCCESS"}
             status="success"
-            message={state.apiResponseState.body.message}
+            message={state.apiResponseBody.messages}
           />
 
           <Warning
-            condition={
-              state.apiResponseState.body.message &&
-              state.apiResponseState.body.status !== "SUCCESS"
-            }
+            condition={state.apiResponseBody.status === "FAILED"}
             status="error"
-            message={state.apiResponseState.body.message}
+            message={state.apiResponseBody.messages}
           />
 
           <AccountButtonView>
-            <AccountButton>Submit</AccountButton>
-            <AccountButton>Clear</AccountButton>
+            <AccountButton onPress={() => handleSignin()}>Submit</AccountButton>
+            <AccountButton onPress={() => dispatch(actions.resetState())}>
+              Clear
+            </AccountButton>
           </AccountButtonView>
           <View>
             <Text variant="caption">Don't have account?</Text>

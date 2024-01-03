@@ -19,7 +19,7 @@ import { AuthContext } from "../../services/authentication/authentication.contex
 const SignupScreen = ({ navigation }) => {
   const windowDimensions = useContext(WindowContext);
 
-  const { state, dispatch, actions } = useContext(AuthContext);
+  const { state, dispatch, actions, handleSignup } = useContext(AuthContext);
 
   useEffect(() => {
     let newIcons = {};
@@ -124,25 +124,27 @@ const SignupScreen = ({ navigation }) => {
 
           <Warning
             condition={
-              state.apiResponseState.body.message &&
-              state.apiResponseState.body.status === "SUCCESS"
+              state.apiResponseBody.messages &&
+              state.apiResponseBody.status === "SUCCESS"
             }
             status="success"
-            message={state.apiResponseState.body.message}
+            message={state.apiResponseBody.messages}
           />
 
           <Warning
             condition={
-              state.apiResponseState.body.message &&
-              state.apiResponseState.body.status !== "SUCCESS"
+              state.apiResponseBody.messages &&
+              state.apiResponseBody.status !== "SUCCESS"
             }
             status="error"
-            message={state.apiResponseState.body.message}
+            message={state.apiResponseBody.messages}
           />
 
           <AccountButtonView>
-            <AccountButton>Submit</AccountButton>
-            <AccountButton>Clear</AccountButton>
+            <AccountButton onPress={() => handleSignup()}>Submit</AccountButton>
+            <AccountButton onPress={() => dispatch(actions.resetState())}>
+              Clear
+            </AccountButton>
           </AccountButtonView>
           <View>
             <Text variant="caption">Already have a account?</Text>

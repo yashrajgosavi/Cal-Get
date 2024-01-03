@@ -3,12 +3,8 @@ import { Text } from "../typography/text.component";
 
 export const Warning = ({ condition, status, message }) => {
   if (condition) {
-    return <Message status={status} message={message} />;
+    return <Text variant={status}>{message}</Text>;
   } else {
     return null;
   }
-};
-
-export const Message = ({ status, message }) => {
-  return <Text variant={status}>{message}</Text>;
 };
