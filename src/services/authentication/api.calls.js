@@ -1,67 +1,91 @@
 import axios from "axios";
-import { getASData, storeASData } from "./store.function";
+import { storeASData } from "./store.function";
 
 const URL = "https://inspired-friendly-cougar.ngrok-free.app";
 
-export const signUpUser = async (state, dispatch) => {
+export const signUpUser = async (state, dispatch, actions) => {
   try {
-    const response = await axios.post(URL + "api/user/signup", {
-      name: state.name,
-      email: state.email,
-      password: state.pwd,
+    const response = await axios.post(URL + "/api/user/signup", {
+      name: state.userDetailState.name,
+      email: state.userDetailState.email,
+      password: state.userDetailState.pwd,
     });
-    dispatch({
-      type: "SET_BODY",
-      body: response.data,
-    });
-    console.log(response.data);
-    if (response.status === 200) {
+    dispatch(actions.setStatus(response.data.status));
+    dispatch(actions.setMessages(response.data.messages));
+    if (response.data.status === "SUCCESS") {
+      dispatch(actions.setData(response.data.data));
       storeASData("userResponse", response.data);
-      let userResponseData = await getASData("userResponse");
-      console.log("userResponseData: ");
-      console.log(userResponseData);
       // handle successful signup
     }
   } catch (error) {
-    console.log(error);
+    if (error.response) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx
+      console.log(error.response.data);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    } else if (error.request) {
+      // The request was made but no response was received
+      // `error.request` is an instance of XMLHttpRequest in the browser
+      // and an instance of http.ClientRequest in node.js
+      console.log(error.request);
+    } else {
+      // Something happened in setting up the request that triggered an Error
+      console.log("Error", error.message);
+    }
     // handle error
   }
 };
 
-export const signInUser = async (state, dispatch) => {
+export const signInUser = async (state, dispatch, actions) => {
   try {
     const response = await axios.post(URL + "/api/user/signin", {
-      email: state.email,
-      password: state.pwd,
+      email: state.userDetailState.email,
+      password: state.userDetailState.pwd,
     });
-    dispatch({
-      type: "SET_BODY",
-      body: response.data,
-    });
-    if (response.status === 200) {
+    dispatch(actions.setStatus(response.data.status));
+    dispatch(actions.setMessages(response.data.messages));
+    if (response.data.status === "SUCCESS") {
+      dispatch(actions.setData(response.data.data));
       storeASData("userResponse", response.data);
-      getASData("userResponse");
       // handle successful signin
     }
   } catch (error) {
-    console.log(error);
+    if (error.response) {
+      console.log(error.response.data);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    } else if (error.request) {
+      console.log(error.request);
+    } else {
+      console.log("Error", error.message);
+    }
     // handle error
   }
 };
 
-export const getAuth = async (state, dispatch) => {
+export const getAuth = async (data) => {
   try {
     axios
       .post(URL + "/api/user/getAuth", {
-        email: state.email,
-        token: state.token,
+        _id: data.data._id,
+        token: data.data.token,
       })
       .then((response) => {
-        console.log(response.data);
+        return true;
       })
       .catch((error) => {
-        console.error(error);
+        if (error.response) {
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          console.log(error.request);
+        } else {
+          console.log("Error", error.message);
+        }
       });
+    return false;
   } catch (error) {
     console.log(error);
     // handle error

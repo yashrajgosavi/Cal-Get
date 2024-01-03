@@ -1,42 +1,37 @@
 import React, { useContext, useEffect } from "react";
+import { Button, TextInput } from "react-native-paper";
+import { View } from "react-native";
+
 import {
+  AccountScrollView,
   AccountBackground,
-  AccountButton,
-  AccountButtonView,
   AccountCard,
   AccountDivider,
-  AccountScrollView,
   AccountTextInput,
+  AccountButtonView,
+  AccountButton,
 } from "../styles/account.styles";
 import { WindowContext } from "../../services/window/window.context";
 import { Text } from "../../components/typography/text.component";
-import { Button, TextInput } from "react-native-paper";
+import { Warning } from "../../components/warning/warning.component";
 import { AuthContext } from "../../services/authentication/authentication.context";
-import { View } from "react-native";
 
 const SignupScreen = ({ navigation }) => {
   const windowDimensions = useContext(WindowContext);
 
-  const {
-    state,
-    dispatch,
-    clearInputFields,
-    handleSignin,
-    handleSignup,
-    clearErrorFields,
-  } = useContext(AuthContext);
+  const { state, dispatch, actions, handleSignup } = useContext(AuthContext);
 
   useEffect(() => {
     let newIcons = {};
 
-    if (!state.confirmPwd) {
+    if (!state.userDetailState.confirmPwd) {
       newIcons = {
         fullName: "account",
         email: "email",
         pwd: "lock",
         confirmPwd: "lock-question",
       };
-    } else if (state.pwd === state.confirmPwd) {
+    } else if (state.userDetailState.pwd === state.userDetailState.confirmPwd) {
       newIcons = {
         fullName: "account",
         email: "email",
@@ -52,10 +47,10 @@ const SignupScreen = ({ navigation }) => {
       };
     }
 
-    if (JSON.stringify(newIcons) !== JSON.stringify(state.icons)) {
-      dispatch({ type: "SET_ICONS", icons: newIcons });
+    if (JSON.stringify(newIcons) !== JSON.stringify(state.iconState.icons)) {
+      dispatch(actions.setIcons(newIcons));
     }
-  }, [state, dispatch, handleSignin]);
+  }, [state, actions, dispatch]);
 
   return (
     <AccountScrollView width={windowDimensions.width}>
@@ -72,73 +67,88 @@ const SignupScreen = ({ navigation }) => {
           <AccountTextInput
             width={windowDimensions.width}
             label="Enter Full Name"
-            value={state.name}
-            onChangeText={(newName) =>
-              dispatch({ type: "SET_NAME", name: newName })
-            }
-            left={<TextInput.Icon icon={state.icons.fullName} />}
+            value={state.userDetailState.name}
+            onChangeText={(newName) => dispatch(actions.setName(newName))}
+            left={<TextInput.Icon icon={state.iconState.icons.fullName} />}
           />
-          {state.nameError ? (
-            <Text variant="error">{state.nameError}</Text>
-          ) : null}
+
+          <Warning
+            condition={state.errorState.nameError}
+            status="error"
+            message={state.errorState.nameError}
+          />
+
           <AccountTextInput
             width={windowDimensions.width}
             label="Enter Email"
-            value={state.email}
-            onChangeText={(newEmail) =>
-              dispatch({ type: "SET_EMAIL", email: newEmail })
-            }
-            left={<TextInput.Icon icon={state.icons.email} />}
+            value={state.userDetailState.email}
+            onChangeText={(newEmail) => dispatch(actions.setEmail(newEmail))}
+            left={<TextInput.Icon icon={state.iconState.icons.email} />}
           />
-          {state.emailError ? (
-            <Text variant="error">{state.emailError}</Text>
-          ) : null}
+
+          <Warning
+            condition={state.errorState.emailError}
+            status="error"
+            message={state.errorState.emailError}
+          />
 
           <AccountTextInput
             width={windowDimensions.width}
             label="Enter Password"
-            value={state.pwd}
-            onChangeText={(newPwd) =>
-              dispatch({ type: "SET_PWD", pwd: newPwd })
-            }
-            left={<TextInput.Icon icon={state.icons.pwd} />}
+            value={state.userDetailState.pwd}
+            onChangeText={(newPwd) => dispatch(actions.setPwd(newPwd))}
+            left={<TextInput.Icon icon={state.iconState.icons.pwd} />}
           />
-          {state.pwdError ? (
-            <Text variant="error">{state.pwdError}</Text>
-          ) : null}
+
+          <Warning
+            condition={state.errorState.pwdError}
+            status="error"
+            message={state.errorState.pwdError}
+          />
+
           <AccountTextInput
             width={windowDimensions.width}
             label="Confirm Password"
-            value={state.confirmPwd}
-            onChangeText={(newConfirmPwd) =>
-              dispatch({ type: "SET_CONFIRM_PWD", confirmPwd: newConfirmPwd })
+            value={state.userDetailState.confirmPwd}
+            onChangeText={(newConfirmPassword) =>
+              dispatch(actions.setConfirmPwd(newConfirmPassword))
             }
-            left={<TextInput.Icon icon={state.icons.confirmPwd} />}
+            left={<TextInput.Icon icon={state.iconState.icons.confirmPwd} />}
           />
-          {state.confirmPwdError ? (
-            <Text variant="error">{state.confirmPwdError}</Text>
-          ) : null}
-          {state.body.message && state.body.status === "SUCCESS" ? (
-            <Text variant="success">{state.body.message}</Text>
-          ) : (
-            <Text variant="error">{state.body.message}</Text>
-          )}
+
+          <Warning
+            condition={state.errorState.confirmPwdError}
+            status="error"
+            message={state.errorState.confirmPwdError}
+          />
+
+          <Warning
+            condition={
+              state.apiResponseBody.messages &&
+              state.apiResponseBody.status === "SUCCESS"
+            }
+            status="success"
+            message={state.apiResponseBody.messages}
+          />
+
+          <Warning
+            condition={
+              state.apiResponseBody.messages &&
+              state.apiResponseBody.status !== "SUCCESS"
+            }
+            status="error"
+            message={state.apiResponseBody.messages}
+          />
+
           <AccountButtonView>
             <AccountButton onPress={() => handleSignup()}>Submit</AccountButton>
-            <AccountButton onPress={() => clearInputFields()}>
+            <AccountButton onPress={() => dispatch(actions.resetState())}>
               Clear
             </AccountButton>
           </AccountButtonView>
           <View>
             <Text variant="caption">Already have a account?</Text>
-            <Button
-              onPress={() => {
-                navigation.goBack();
-                clearErrorFields();
-              }}
-            >
-              Login
-            </Button>
+            <Button onPress={() => navigation.goBack()}>Login</Button>
           </View>
         </AccountCard>
       </AccountBackground>

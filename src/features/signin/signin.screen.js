@@ -1,4 +1,7 @@
 import React, { useContext } from "react";
+import { View } from "react-native";
+import { Button, TextInput } from "react-native-paper";
+
 import {
   AccountBackground,
   AccountButton,
@@ -9,16 +12,14 @@ import {
   AccountTextInput,
 } from "../styles/account.styles";
 import { Text } from "../../components/typography/text.component";
-import { Button, TextInput } from "react-native-paper";
 import { WindowContext } from "../../services/window/window.context";
 import { AuthContext } from "../../services/authentication/authentication.context";
-import { View } from "react-native";
+import { Warning } from "../../components/warning/warning.component";
 
 const SignInScreen = ({ navigation }) => {
   const windowDimensions = useContext(WindowContext);
 
-  const { state, dispatch, clearInputFields, handleSignin, clearErrorFields } =
-    useContext(AuthContext);
+  const { state, dispatch, actions, handleSignin } = useContext(AuthContext);
 
   return (
     <AccountScrollView width={windowDimensions.width}>
@@ -31,50 +32,58 @@ const SignInScreen = ({ navigation }) => {
           marginTop={windowDimensions.height}
         >
           <Text variant="heading">SignIn</Text>
+
           <AccountDivider />
+
           <AccountTextInput
             width={windowDimensions.width}
             label="Enter Email"
-            value={state.email}
-            onChangeText={(newEmail) =>
-              dispatch({ type: "SET_EMAIL", email: newEmail })
-            }
-            left={<TextInput.Icon icon={state.icons.email} />}
+            value={state.userDetailState.email}
+            onChangeText={(newEmail) => dispatch(actions.setEmail(newEmail))}
+            left={<TextInput.Icon icon={state.iconState.icons.email} />}
           />
-          {state.emailError ? (
-            <Text variant="error">{state.emailError}</Text>
-          ) : null}
+
+          <Warning
+            condition={state.errorState.emailError}
+            status="error"
+            message={state.errorState.emailError}
+          />
+
           <AccountTextInput
             width={windowDimensions.width}
             label="Enter Password"
-            value={state.pwd}
-            onChangeText={(newPwd) =>
-              dispatch({ type: "SET_PWD", pwd: newPwd })
-            }
-            left={<TextInput.Icon icon={state.icons.pwd} />}
+            value={state.userDetailState.pwd}
+            onChangeText={(newPwd) => dispatch(actions.setPwd(newPwd))}
+            left={<TextInput.Icon icon={state.iconState.icons.pwd} />}
           />
-          {state.pwdError ? (
-            <Text variant="error">{state.pwdError}</Text>
-          ) : null}
-          {state.body.message && state.body.status === "SUCCESS" ? (
-            <Text variant="success">{state.body.message}</Text>
-          ) : (
-            <Text variant="error">{state.body.message}</Text>
-          )}
+
+          <Warning
+            condition={state.errorState.pwdError}
+            status="error"
+            message={state.errorState.pwdError}
+          />
+
+          <Warning
+            condition={state.apiResponseBody.status === "SUCCESS"}
+            status="success"
+            message={state.apiResponseBody.messages}
+          />
+
+          <Warning
+            condition={state.apiResponseBody.status === "FAILED"}
+            status="error"
+            message={state.apiResponseBody.messages}
+          />
+
           <AccountButtonView>
             <AccountButton onPress={() => handleSignin()}>Submit</AccountButton>
-            <AccountButton onPress={() => clearInputFields()}>
+            <AccountButton onPress={() => dispatch(actions.resetState())}>
               Clear
             </AccountButton>
           </AccountButtonView>
           <View>
             <Text variant="caption">Don't have account?</Text>
-            <Button
-              onPress={() => {
-                navigation.navigate("SignUp");
-                clearErrorFields();
-              }}
-            >
+            <Button onPress={() => navigation.navigate("SignUp")}>
               SignUp
             </Button>
           </View>

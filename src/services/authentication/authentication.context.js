@@ -1,91 +1,45 @@
-import React, {
-  createContext,
-  useCallback,
-  useEffect,
-  useReducer,
-} from "react";
-import { initialState, reducer } from "./variables";
-import { validateSignInForm, validateSignupForm } from "./validations";
+import React, { createContext, useReducer } from "react";
+
+import actions, { initialState, reducer } from "./state.variables";
+import { validateSignInForm, validateSignupForm } from "./form.validations";
 import { signInUser, signUpUser } from "./api.calls";
-import { getASData } from "./store.function";
 
 export const AuthContext = createContext();
 
 export default function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      let userResponseData = await getASData("userResponse");
-      if (userResponseData !== null) {
-        dispatch({
-          type: "GET_AUTH",
-          getAuth: {
-            isLoggedIn: true,
-            token: userResponseData.token,
-          },
-        });
-      } else {
-        dispatch({
-          type: "GET_AUTH",
-          getAuth: {
-            isLoggedIn: false,
-            token: null,
-          },
-        });
+  const handleSignup = () => {
+    try {
+      dispatch(actions.resetState("errorState"));
+      if (!validateSignupForm(state, dispatch, actions)) {
+        console.log("SignIn Form is invalid");
+        return;
       }
-    };
-    checkAuth();
-  }, [state.body]);
-
-  const clearInputFields = () => {
-    dispatch({ type: "SET_NAME", name: "" });
-    dispatch({ type: "SET_EMAIL", email: "" });
-    dispatch({ type: "SET_PWD", pwd: "" });
-    dispatch({ type: "SET_CONFIRM_PWD", confirmPwd: "" });
+      console.log("SignIn Form is valid");
+      signUpUser(state, dispatch, actions);
+    } catch (error) {
+      console.error("Error during signin: ", error);
+    }
   };
 
-  const clearErrorFields = () => {
-    dispatch({ type: "SET_NAME_ERROR", nameError: "" });
-    dispatch({ type: "SET_EMAIL_ERROR", emailError: "" });
-    dispatch({ type: "SET_PWD_ERROR", pwdError: "" });
-    dispatch({ type: "SET_CONFIRM_PWD_ERROR", confirmPwdError: "" });
-    dispatch({
-      type: "SET_BODY",
-      body: {
-        status: "",
-        message: "",
-      },
-    });
+  const handleSignin = () => {
+    try {
+      dispatch(actions.resetState("errorState"));
+      if (!validateSignInForm(state, dispatch, actions)) {
+        console.log("SignIn Form is invalid");
+        return;
+      }
+      console.log("SignIn Form is valid");
+      signInUser(state, dispatch, actions);
+    } catch (error) {
+      console.error("Error during signin: ", error);
+    }
   };
 
-  const handleSignup = useCallback(async () => {
-    clearErrorFields();
-    if (validateSignupForm(state, dispatch)) {
-      console.log("Form is valid");
-      if (signUpUser(state, dispatch)) {
-      }
-    }
-  }, [state, dispatch]);
-
-  const handleSignin = useCallback(async () => {
-    clearErrorFields();
-    if (validateSignInForm(state, dispatch)) {
-      console.log("Form is valid");
-      if (signInUser(state, dispatch)) {
-      }
-    }
-  }, [state, dispatch]);
   return (
     <AuthContext.Provider
-      value={{
-        state,
-        dispatch,
-        clearInputFields,
-        handleSignin,
-        handleSignup,
-        clearErrorFields,
-      }}
+      value={{ state, dispatch, actions, handleSignup, handleSignin }}
     >
       {children}
     </AuthContext.Provider>

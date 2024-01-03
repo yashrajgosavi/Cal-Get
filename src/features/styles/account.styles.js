@@ -11,6 +11,7 @@ export const AccountBackground = styled(ImageBackground).attrs({
   source: require("../../../assets/home_bg.jpg"),
 })`
   flex: auto;
+  width: auto;
   height: ${({ height }) => height + 48}px;
   align-items: center;
   justify-content: flex-start;
@@ -38,7 +39,7 @@ export const AccountDivider = styled(View)`
 `;
 
 export const AccountTextInput = styled(TextInput).attrs({
-  mode: "outlined",
+  mode: "flat",
 })`
   margin: 12px;
   background-color: transparent;
@@ -47,7 +48,7 @@ export const AccountTextInput = styled(TextInput).attrs({
 `;
 
 export const AccountButton = styled(Button).attrs({
-  mode: "contained",
+  mode: "outlined",
 })`
   margin: 15px;
   margin-bottom: 30px;

@@ -6,16 +6,16 @@ import { View } from "react-native";
 import { removeASData } from "../../services/authentication/store.function";
 
 const Dashboard = () => {
-  const { clearErrorFields } = useContext(AuthContext);
+  const { dispatch, actions } = useContext(AuthContext);
   return (
     <View>
       <Text variant="title">Dashboard</Text>
       <Button
         icon="door"
-        mode="contained"
+        mode="outlined"
         onPress={() => {
           removeASData("userResponse");
-          clearErrorFields();
+          dispatch(actions.resetState());
         }}
       >
         Logout
