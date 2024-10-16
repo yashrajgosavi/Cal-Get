@@ -1,7 +1,7 @@
 import axios from "axios";
 import { storeASData } from "./store.function";
 
-const URL = "http://localhost:4000";
+const URL = "https://inspired-friendly-cougar.ngrok-free.app";
 
 export const signUpUser = async (state, dispatch, actions) => {
   try {
