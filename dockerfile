@@ -1,21 +1,18 @@
-# Start with a minimal base image
-FROM node:16-alpine
+# Use an official Node.js runtime as the base image
+FROM node:14
 
-# Set working directory
-WORKDIR /app
+# Set the working directory in the container
+WORKDIR /usr/src/app
 
-# Copy package.json and yarn.lock
-COPY package*.json yarn.lock ./
+# Copy the necessary files and directories into the container
+COPY packageServe.json ./package.json
+COPY dist ./dist
 
 # Install dependencies
-RUN yarn install serve
+RUN yarn
 
-# Copy the rest of the application code
-COPY dist .
-
-
-# Expose port 3000
+# Expose the port the app runs on
 EXPOSE 3000
 
-# Serve the static files
-CMD ["serve", "-s", "dist", "--port", "3000"]
+# Define the command to run the application
+CMD ["npx", "serve", "-s", "dist"]
